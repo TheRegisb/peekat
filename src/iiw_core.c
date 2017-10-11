@@ -35,9 +35,9 @@ int			showme_core(char *filename, char type)
   SDL_Rect		border, fullscr;
   SDL_DisplayMode	desktop;
 
-  if (!(image = SDL_LoadBMP(filename)))
+  if (!(image = IMG_Load(filename)))
     {
-      fprintf(stderr, "SDL_LoadBMP failure: %s.\n", SDL_GetError());
+      fprintf(stderr, "IMG_Load failure: %s.\n", SDL_GetError());
       return (2);
     }
   if (SDL_Init(SDL_INIT_VIDEO) == 1)

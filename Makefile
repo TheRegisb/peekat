@@ -4,7 +4,7 @@ RM	=	rm -f
 
 CFLAGS	+=	-Wall -Wextra -pedantic -std=gnu90 -Iinclude/
 
-SDL2	=	`pkg-config --cflags --libs sdl2`
+SDL2	=	`pkg-config --cflags --libs sdl2 SDL2_image`
 
 SRC	=	$(addprefix src/,	\
 		iiw_core.c		\

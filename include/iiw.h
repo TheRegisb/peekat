@@ -2,6 +2,7 @@
  # define IIW_H_
   #include <stdio.h>
   #include <SDL2/SDL.h>
+  #include <SDL2/SDL_image.h>
   #include <errno.h>
   #ifdef _WIN32
    #include <io.h>
