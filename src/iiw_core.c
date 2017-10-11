@@ -27,6 +27,17 @@ static void	event_loop(SDL_Renderer *rend,
   while (event.type != SDL_QUIT);
 }
 
+void	quit_sdl(void)
+{
+  SDL_Quit();
+}
+
+int	sdl_error_output(char *func_name)
+{
+  fprintf(stderr, "%s: %s.\n", func_name, SDL_GetError());
+  return (2);
+}
+
 int			showme_core(char *filename, char type)
 {
   SDL_Window		*window;
@@ -36,27 +47,16 @@ int			showme_core(char *filename, char type)
   SDL_DisplayMode	desktop;
 
   if (!(image = IMG_Load(filename)))
-    {
-      fprintf(stderr, "IMG_Load failure: %s.\n", SDL_GetError());
-      return (2);
-    }
+      return (sdl_error_output("IMG_Load"));
   if (SDL_Init(SDL_INIT_VIDEO) == 1)
-    {
-      fprintf(stderr, "SDL_Init failure: %s.\n", SDL_GetError());
-      return (2);
-    }
+    return (sdl_error_output("SDL_Init"));
+  atexit(quit_sdl);
   SDL_GetCurrentDisplayMode(0, &desktop);
   setup_rect(image, &desktop, &border, &fullscr);
   if (!(window = setup_window(&border, &desktop, filename, type)))
-    {
-      fprintf(stderr, "SDL_CreateWindow failure: %s.\n", SDL_GetError());
-      return (2);
-    }
+    return (sdl_error_output("SDL_CreateWindow"));
   if (!(renderer = SDL_CreateRenderer(window, -1, 0)))
-    {
-      fprintf(stderr, "SDL_CreateRenderer failure: %s.\n", SDL_GetError());
-      return (2);
-    }
+    return (sdl_error_output("SDL_CreateRenderer"));
   if (type == 'b')
     event_loop(renderer, image, &border);
   else
@@ -64,7 +64,6 @@ int			showme_core(char *filename, char type)
   SDL_FreeSurface(image);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
-  SDL_Quit();
   return (0);
 }
 
