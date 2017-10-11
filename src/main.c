@@ -8,7 +8,8 @@ static void	show_help(char *prog_name)
 	 "  -f: Show image in fullscreen.\n"
 	 "File:"
 	 "  Must be either a BMP, [...] or [...].\n"
-	 "If the image is to large for the screen, it will be arbitrarily scaled down to fit.\n"
+	 "If the image is to large for the screen, "
+	 "it will be arbitrarily scaled down to fit.\n"
 	 "Press Esc key or window's cross to quit.\n", prog_name);
 }
 
@@ -44,7 +45,8 @@ int	main(int ac, char **av)
     {
       if (access(av[optind], R_OK) == 0)
 	return (showme_core(av[optind], mode));
-      fprintf(stderr, "Error parsing \"%s\": %s.\n", av[optind], strerror(errno));
+      fprintf(stderr, "Error parsing \"%s\": %s.\n",
+	      av[optind], strerror(errno));
     }
   else
     fprintf(stderr, "Syntax error: No file given.\n");
