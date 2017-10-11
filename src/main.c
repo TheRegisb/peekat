@@ -1,14 +1,14 @@
-#include "iiw.h"
+#include "peekat.h"
 
 static void	show_help(char *prog_name)
 {
-  printf("iww -- Idiotic Image Viewer\n"
+  printf("peekat -- A monotask image viewer\n"
 	 "Usage: %s [(-b/)-f] [file]\nOptions:\n"
 	 "  -b: Show image in a bordered window. (implicit default)\n"
 	 "  -f: Show image in fullscreen.\n"
-	 "File:"
-	 "  Must be either a BMP, [...] or [...].\n"
-	 "If the image is to large for the screen, "
+	 "File must be either a BMP, GIF, JPEG, PNG, TGA, TIFF, LBM,"
+	 "PNM, PCX, WEBP, XCF, XPM or XV file.\n"
+	 "If the image is to large for the window/screen, "
 	 "it will be arbitrarily scaled down to fit.\n"
 	 "Press Esc key or window's cross to quit.\n", prog_name);
 }
@@ -20,7 +20,7 @@ int	main(int ac, char **av)
 
   if (ac == 1)
     {
-      fprintf(stderr, "Syntax error: Type iiw -h for help.\n");
+      fprintf(stderr, "Syntax error: Type %s -h for help.\n", av[0]);
       return (1);
     }
   while (( opt = getopt(ac, av, "bfh")) != -1)
@@ -37,14 +37,14 @@ int	main(int ac, char **av)
 	  mode = FULLSCREEN_MODE;
 	  break;
 	default:
-	  fprintf(stderr, "Type iiw -h for help.\n");
+	  fprintf(stderr, "Type %s -h for help.\n", av[0]);
 	  return (1);
 	}
     }
   if (av[optind])
     {
       if (access(av[optind], R_OK) == 0)
-	return (showme_core(av[optind], mode));
+	return (peekat_core(av[optind], mode));
       fprintf(stderr, "Error parsing \"%s\": %s.\n",
 	      av[optind], strerror(errno));
     }

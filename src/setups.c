@@ -1,4 +1,4 @@
-#include "iiw.h"
+#include "peekat.h"
 
 SDL_Window	*setup_window(SDL_Rect *border, SDL_DisplayMode *desktop,
 			      char *filename, char type)

@@ -1,4 +1,4 @@
-#include "iiw.h"
+#include "peekat.h"
 
 /*
 ** Default maximum size for bordered windows
@@ -38,7 +38,7 @@ int	sdl_error_output(char *func_name)
   return (2);
 }
 
-int			showme_core(char *filename, char type)
+int			peekat_core(char *filename, char type)
 {
   SDL_Window		*window;
   SDL_Renderer		*renderer;
@@ -66,4 +66,3 @@ int			showme_core(char *filename, char type)
   SDL_DestroyWindow(window);
   return (0);
 }
-

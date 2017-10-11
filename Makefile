@@ -7,13 +7,13 @@ CFLAGS	+=	-Wall -Wextra -pedantic -std=gnu90 -Iinclude/
 SDL2	=	`pkg-config --cflags --libs sdl2 SDL2_image`
 
 SRC	=	$(addprefix src/,	\
-		iiw_core.c		\
+		peekat_core.c		\
 		setups.c		\
 		main.c)
 
 OBJ	=	$(SRC:.c=.o)
 
-NAME	=	iiw
+NAME	=	peekat
 
 all: $(NAME)
 

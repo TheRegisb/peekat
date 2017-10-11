@@ -15,7 +15,7 @@
 ** iiw_core.c
 */
 
-int	showme_core(char *filename, char type);
+int	peekat_core(char *filename, char type);
 
 /*
 ** setups.c
