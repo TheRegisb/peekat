@@ -1,74 +1,45 @@
 #include "peekat.h"
 
-SDL_Window	*setup_window(SDL_Rect *border, SDL_DisplayMode *desktop,
-			      char *filename, char type)
+SDL_Window	*setup_window(SDL_Rect *border, char *filename, char type)
 {
   SDL_Window		*window;
 
-  if (type == 'b')
-    {
-      window = SDL_CreateWindow(filename,
-				SDL_WINDOWPOS_UNDEFINED,
-				SDL_WINDOWPOS_UNDEFINED,
-				border->w, border->h,
-				SDL_WINDOW_ALLOW_HIGHDPI);
-    }
-  else
-    {
-      window = SDL_CreateWindow(filename,
-				SDL_WINDOWPOS_UNDEFINED,
-				SDL_WINDOWPOS_UNDEFINED,
-				desktop->w, desktop->h,
-				SDL_WINDOW_ALLOW_HIGHDPI
-				| SDL_WINDOW_FULLSCREEN_DESKTOP);
-    }
+  window = SDL_CreateWindow(filename,
+			    SDL_WINDOWPOS_UNDEFINED,
+			    SDL_WINDOWPOS_UNDEFINED,
+			    border->w, border->h,
+			    SDL_WINDOW_ALLOW_HIGHDPI |
+			    (type == 'b' ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP));
   return (window);
 }
 
-int		set_renderer(SDL_Renderer *rend,
-			     SDL_Surface *img, SDL_Rect *pos)
+static float	fit_ratio(int disp_w, int disp_h, int img_w, int img_h)
 {
-  SDL_Texture	*fimg;
+  const float	DISPLAY_RATIO = 16.0/9;
 
-  SDL_RenderClear(rend);
-  fimg = SDL_CreateTextureFromSurface(rend, img);
-  SDL_RenderCopy(rend, fimg, NULL, pos);
-  SDL_DestroyTexture(fimg);
-  return (0);
+  return ((DISPLAY_RATIO > (float)img_w / img_h) ?
+	  (float)disp_h / img_h : (float)disp_w / img_w);
 }
 
-void		setup_rect(SDL_Surface *image, SDL_DisplayMode *dsktp,
-			   SDL_Rect *border, SDL_Rect *fullscr)
+void	setup_rect(SDL_Surface *image, SDL_Rect *size,
+		   int disp_w, int disp_h,
+		   char mode)
 {
-  const int	DSK_MAX_W = 1600, DSK_MAX_H = 900;
-  
-  /* Setting dimentions for bordered window */
-  if (image->w > DSK_MAX_W || image->h > DSK_MAX_H)
+  float		scale_factor, fwidth, fheight;
+
+  if (image->w > disp_w || image->h > disp_h) /* Scale down on overflow */
     {
-      border->w = (image->w > image->h ?
-		   DSK_MAX_W : (float)image->w / ((float)image->h / DSK_MAX_H));
-      border->h = (image->w > image->h ?
-		   (float)image->h / ((float)image->w / DSK_MAX_W) : DSK_MAX_H);
+      scale_factor = fit_ratio(disp_w, disp_h, image->w, image->h);
+      fwidth = image->w * scale_factor;
+      fheight = image->h * scale_factor;
+      size->w = fwidth;
+      size->h = fheight;
     }
   else
     {
-      border->w = image->w;
-      border->h = image->h;
+      size->w = image->w;
+      size->h = image->h;
     }
-  border->x = (border->y = 0);
-  /* Setting dimentions for fullscreen */
-  if (image->w > dsktp->w || image->h > dsktp->h)
-    {
-      fullscr->w = (image->w > image->h ?
-		    dsktp->w : (float)image->w / ((float)image->h / dsktp->h));
-      fullscr->h = (image->w > image->h ?
-		    (float)image->h / ((float)image->w / dsktp->w) : dsktp->h);
-    }
-  else
-    {
-      fullscr->w = image->w;
-      fullscr->h = image->h;
-    }
-  fullscr->x = (dsktp->w - fullscr->w) / 2;
-  fullscr->y = (dsktp->h - fullscr->h) / 2;
+  size->x = (mode == 'b' ? 0 : disp_w / 2 - image->h / 2);
+  size->y = (mode == 'b' ? 0 : disp_h / 2 - image->w / 2);
 }

@@ -1,38 +1,40 @@
 #include "peekat.h"
 
-/*
-** Default maximum size for bordered windows
-*/
+static void	refresh_renderer(SDL_Renderer *rend,
+				 SDL_Texture *fimg, SDL_Rect *pos)
+{
+  SDL_RenderClear(rend);
+  SDL_RenderCopy(rend, fimg, NULL, pos);
+  SDL_RenderPresent(rend);
+}
 
 static void	event_loop(SDL_Renderer *rend,
 			   SDL_Surface *image, SDL_Rect *pos)
 {
   SDL_Event	event;
-  
-  set_renderer(rend, image, pos);
+  SDL_Texture	*fimg;
+
+  fimg = SDL_CreateTextureFromSurface(rend, image);
   do
     {
       if (SDL_PollEvent(&event) == 1)
 	{
+	  refresh_renderer(rend, fimg, pos);
 	  switch (event.type)
 	  case SDL_KEYDOWN:
 	    {
-	      if (event.key.keysym.sym == SDLK_ESCAPE)
+	      if (event.key.keysym.sym == SDLK_ESCAPE
+		  || event.key.keysym.sym == SDLK_q)
 		event.type = SDL_QUIT;
 	      break;
 	    }
 	}
-      SDL_RenderPresent(rend);
     }
   while (event.type != SDL_QUIT);
+  SDL_DestroyTexture(fimg);
 }
 
-void	quit_sdl(void)
-{
-  SDL_Quit();
-}
-
-int	sdl_error_output(char *func_name)
+static int	sdl_error_output(char *func_name)
 {
   fprintf(stderr, "%s: %s.\n", func_name, SDL_GetError());
   return (2);
@@ -40,10 +42,11 @@ int	sdl_error_output(char *func_name)
 
 int			peekat_core(char *filename, char type)
 {
+  const int		DSK_MAX_W = 1600, DSK_MAX_H = 900;
   SDL_Window		*window;
   SDL_Renderer		*renderer;
   SDL_Surface		*image;
-  SDL_Rect		border, fullscr;
+  SDL_Rect		border;
   SDL_DisplayMode	desktop;
 
   if (!(image = IMG_Load(filename)))
@@ -51,16 +54,18 @@ int			peekat_core(char *filename, char type)
   if (SDL_Init(SDL_INIT_VIDEO) == 1)
     return (sdl_error_output("SDL_Init"));
   atexit(quit_sdl);
-  SDL_GetCurrentDisplayMode(0, &desktop);
-  setup_rect(image, &desktop, &border, &fullscr);
-  if (!(window = setup_window(&border, &desktop, filename, type)))
+  if (type == 'b')
+    setup_rect(image, &border, DSK_MAX_W, DSK_MAX_H, 'b');
+  else
+    {
+      SDL_GetCurrentDisplayMode(0, &desktop);
+      setup_rect(image, &border, desktop.w, desktop.h, 'f');
+    }
+  if (!(window = setup_window(&border, filename, type)))
     return (sdl_error_output("SDL_CreateWindow"));
   if (!(renderer = SDL_CreateRenderer(window, -1, 0)))
     return (sdl_error_output("SDL_CreateRenderer"));
-  if (type == 'b')
-    event_loop(renderer, image, &border);
-  else
-    event_loop(renderer, image, &fullscr);
+  event_loop(renderer, image, &border);
   SDL_FreeSurface(image);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);

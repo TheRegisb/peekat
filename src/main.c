@@ -13,6 +13,11 @@ static void	show_help(char *prog_name)
 	 "Press Esc key or window's cross to quit.\n", prog_name);
 }
 
+void	quit_sdl(void) /* Linked to peekat_core's atexit() */
+{
+  SDL_Quit();
+}
+
 int	main(int ac, char **av)
 {
   int	opt;
