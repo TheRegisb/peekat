@@ -34,12 +34,14 @@ void	setup_rect(SDL_Surface *image, SDL_Rect *size,
       fheight = image->h * scale_factor;
       size->w = fwidth;
       size->h = fheight;
+      size->x = (mode == 'b' ? 0 : disp_w / 2 - fwidth / 2);
+      size->y = (mode == 'b' ? 0 : disp_h / 2 - fheight / 2);
     }
   else
     {
       size->w = image->w;
       size->h = image->h;
+      size->x = (mode == 'b' ? 0 : disp_w / 2 - image->w / 2);
+      size->y = (mode == 'b' ? 0 : disp_h / 2 - image->h / 2);
     }
-  size->x = (mode == 'b' ? 0 : disp_w / 2 - image->h / 2);
-  size->y = (mode == 'b' ? 0 : disp_h / 2 - image->w / 2);
 }
