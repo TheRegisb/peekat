@@ -94,3 +94,4 @@ int	main(int ac, char **av)
     fprintf(stderr, "Syntax error: No file given.\n");
   return (2);
 }
+

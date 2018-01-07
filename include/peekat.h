@@ -58,3 +58,4 @@ void		setup_rect(SDL_Surface *img, SDL_Rect *border,
 
 
 #endif /* !PEEKAT_H_ */
+

@@ -91,3 +91,4 @@ int			peekat_core(char *filename, scr_display_mode_t mode)
   SDL_DestroyWindow(window);
   return (0);
 }
+

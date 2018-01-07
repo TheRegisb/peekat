@@ -67,3 +67,4 @@ void	setup_rect(SDL_Surface *image, SDL_Rect *size,
       size->y = (mode == BORDERED_MODE ? 0 : disp_h / 2 - image->h / 2);
     }
 }
+
