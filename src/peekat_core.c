@@ -40,7 +40,7 @@ static int	sdl_error_output(char *func_name)
   return (2);
 }
 
-int			peekat_core(char *filename, char type)
+int			peekat_core(char *filename, scr_display_mode_t mode)
 {
   const int		DSK_MAX_W = 1600, DSK_MAX_H = 900;
   SDL_Window		*window;
@@ -54,14 +54,14 @@ int			peekat_core(char *filename, char type)
   if (SDL_Init(SDL_INIT_VIDEO) == 1)
     return (sdl_error_output("SDL_Init"));
   atexit(quit_sdl);
-  if (type == 'b')
-    setup_rect(image, &border, DSK_MAX_W, DSK_MAX_H, 'b');
+  if (mode == BORDERED_MODE)
+    setup_rect(image, &border, DSK_MAX_W, DSK_MAX_H, BORDERED_MODE);
   else
     {
       SDL_GetCurrentDisplayMode(0, &desktop);
-      setup_rect(image, &border, desktop.w, desktop.h, 'f');
+      setup_rect(image, &border, desktop.w, desktop.h, FULLSCREEN_MODE);
     }
-  if (!(window = setup_window(&border, filename, type)))
+  if (!(window = setup_window(&border, filename, mode)))
     return (sdl_error_output("SDL_CreateWindow"));
   if (!(renderer = SDL_CreateRenderer(window, -1, 0)))
     return (sdl_error_output("SDL_CreateRenderer"));

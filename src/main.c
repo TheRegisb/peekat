@@ -10,7 +10,7 @@ static void	show_help(char *prog_name)
 	 "PNM, PCX, WEBP, XCF, XPM or XV file.\n"
 	 "If the image is to large for the window/screen, "
 	 "it will be arbitrarily scaled down to fit.\n"
-	 "Press Esc key or window's cross to quit.\n", prog_name);
+	 "Press Esc key, q key or window's cross to quit.\n", prog_name);
 }
 
 void	quit_sdl(void) /* Linked to peekat_core's atexit() */
@@ -21,9 +21,9 @@ void	quit_sdl(void) /* Linked to peekat_core's atexit() */
 int	main(int ac, char **av)
 {
   int	opt;
-  enum { BORDERED_MODE = 'b', FULLSCREEN_MODE = 'f' } mode = BORDERED_MODE;
+  scr_display_mode_t mode = BORDERED_MODE;
 
-  if (ac == 1)
+  if (ac == 1)nnn
     {
       fprintf(stderr, "Syntax error: Type %s -h for help.\n", av[0]);
       return (1);

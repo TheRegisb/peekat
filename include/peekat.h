@@ -9,7 +9,11 @@
   #else
    #include <unistd.h>
   #endif /* !_WIN32 */
-#endif /* !PEEKAT_H_ */
+
+typedef enum {
+	BORDERED_MODE,
+	FULLSCREEN_MODE
+}	scr_display_mode_t;
 
 /*
 ** main.c
@@ -21,12 +25,16 @@ void	quit_sdl(void);
 ** peekat_core.c
 */
 
-int	peekat_core(char *filename, char type);
+int	peekat_core(char *filename, scr_display_mode_t mode);
 
 /*
 ** setups.c
 */
 
-SDL_Window	*setup_window(SDL_Rect *border, char *name, char type);
+SDL_Window	*setup_window(SDL_Rect *border, char *name,
+			      scr_display_mode_t type);
 void		setup_rect(SDL_Surface *img, SDL_Rect *border,
-			   int w, int h, char mode);
+			   int w, int h, scr_display_mode_t mode);
+
+
+#endif /* !PEEKAT_H_ */

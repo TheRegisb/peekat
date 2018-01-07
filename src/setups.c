@@ -1,6 +1,7 @@
 #include "peekat.h"
 
-SDL_Window	*setup_window(SDL_Rect *border, char *filename, char type)
+SDL_Window	*setup_window(SDL_Rect *border, char *filename,
+			      scr_display_mode_t mode)
 {
   SDL_Window		*window;
 
@@ -9,7 +10,8 @@ SDL_Window	*setup_window(SDL_Rect *border, char *filename, char type)
 			    SDL_WINDOWPOS_UNDEFINED,
 			    border->w, border->h,
 			    SDL_WINDOW_ALLOW_HIGHDPI |
-			    (type == 'b' ? 0 : SDL_WINDOW_FULLSCREEN_DESKTOP));
+			    (mode == BORDERED_MODE ?
+			     0 : SDL_WINDOW_FULLSCREEN_DESKTOP));
   return (window);
 }
 
@@ -23,7 +25,7 @@ static float	fit_ratio(int disp_w, int disp_h, int img_w, int img_h)
 
 void	setup_rect(SDL_Surface *image, SDL_Rect *size,
 		   int disp_w, int disp_h,
-		   char mode)
+		   scr_display_mode_t mode)
 {
   float		scale_factor, fwidth, fheight;
 
@@ -34,14 +36,14 @@ void	setup_rect(SDL_Surface *image, SDL_Rect *size,
       fheight = image->h * scale_factor;
       size->w = fwidth;
       size->h = fheight;
-      size->x = (mode == 'b' ? 0 : disp_w / 2 - fwidth / 2);
-      size->y = (mode == 'b' ? 0 : disp_h / 2 - fheight / 2);
+      size->x = (mode == BORDERED_MODE ? 0 : disp_w / 2 - fwidth / 2);
+      size->y = (mode == BORDERED_MODE ? 0 : disp_h / 2 - fheight / 2);
     }
   else
     {
       size->w = image->w;
       size->h = image->h;
-      size->x = (mode == 'b' ? 0 : disp_w / 2 - image->w / 2);
-      size->y = (mode == 'b' ? 0 : disp_h / 2 - image->h / 2);
+      size->x = (mode == BORDERED_MODE ? 0 : disp_w / 2 - image->w / 2);
+      size->y = (mode == BORDERED_MODE ? 0 : disp_h / 2 - image->h / 2);
     }
 }
