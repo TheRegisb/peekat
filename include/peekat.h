@@ -30,6 +30,8 @@
    #include <unistd.h>
   #endif /* !_WIN32 */
 
+#define PROG_NAME "peekat"
+
 typedef enum {
 	BORDERED_MODE,
 	FULLSCREEN_MODE

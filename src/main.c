@@ -20,31 +20,31 @@
 
 #include "peekat.h"
 
-static void	show_help(char *prog_name)
+static void	show_help(void)
 {
   printf("%s -- A monotask image viewer\n"
 	 "Usage: %s [(-b/)-f] [file]\nOptions:\n"
 	 "  -b: Show image in a bordered window (implicit default).\n"
 	 "  -f: Show image in fullscreen.\n"
 	 "  -h: Show this help message.\n"
-	 "  -v: Show version and lisence.\n"
+	 "  -v: Show version and licence.\n"
 	 "File must be either a BMP, GIF, JPEG, PNG, TGA, TIFF, LBM,"
 	 "PNM, PCX, WEBP, XCF, XPM or XV file.\n"
 	 "If the image is to large for the window/screen, "
 	 "it will be arbitrarily scaled down to fit.\n"
 	 "Press Esc key, q key or window's cross to quit.\n",
-	 prog_name, prog_name);
+	 PROG_NAME, PROG_NAME);
 }
 
-static void	show_version(char *prog_name)
+static void	show_version(void)
 {
 	printf("%s -- A monotask image viewer\n   Version: 0.7\n   "
 	       "Made by: Régis Berthelot\n   "
-	       "Lisenced under Zlib\n   "
+	       "Licenced under Zlib\n   "
 	       "This software is free, and you are welcome to redistribute it "
 	       "under cetain conditions.\n   "
 	       "This program comes with ABSOLUTELY NO WARRANTY.\n",
-	       prog_name);
+	       PROG_NAME);
 }
 
 void	quit_sdl(void) /* Linked to peekat_core's atexit() */
@@ -59,7 +59,7 @@ int	main(int ac, char **av)
 
   if (ac == 1)
     {
-      fprintf(stderr, "Syntax error: Type %s -h for help.\n", av[0]);
+      fprintf(stderr, "Syntax error: Type %s -h for help.\n", PROG_NAME);
       return (1);
     }
   while (( opt = getopt(ac, av, "bfhv")) != -1)
@@ -67,10 +67,10 @@ int	main(int ac, char **av)
       switch (opt)
 	{
 	case 'h':
-	  show_help(av[0]);
+	  show_help();
 	  return (0);
 	case 'v':
-	  show_version(av[0]);
+	  show_version();
 	  return (0);
 	case 'b':
 	  mode = BORDERED_MODE;
@@ -79,7 +79,7 @@ int	main(int ac, char **av)
 	  mode = FULLSCREEN_MODE;
 	  break;
 	default:
-	  fprintf(stderr, "Type %s -h for help.\n", av[0]);
+	  fprintf(stderr, "Type %s -h for help.\n", PROG_NAME);
 	  return (1);
 	}
     }
